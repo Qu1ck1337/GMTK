@@ -9,8 +9,13 @@ public class UIAssistant : MonoBehaviour
     private Dice[] _dices;
     [SerializeField]
     private Button _confirmationButton;
-    [SerializeField]
+
     private SelectionManager _selectionManager;
+
+    private void Start()
+    {
+        _selectionManager = GameManager.Self.SelectionManager;
+    }
 
     private void Update()
     {

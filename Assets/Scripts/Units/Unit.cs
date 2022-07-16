@@ -15,4 +15,13 @@ public class Unit : MonoBehaviour
     {
         _hex = GetComponentInParent<Hex>().gameObject;
     }
+
+    public void ReduceHealth(int health)
+    {
+        _unitStats.Health -= health;
+        if (_unitStats.Health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

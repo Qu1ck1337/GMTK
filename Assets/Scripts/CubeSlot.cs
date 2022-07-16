@@ -7,7 +7,7 @@ public class CubeSlot : MonoBehaviour, IDropHandler
 {
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Ondrop");
+        //Debug.Log("Ondrop");
         if (eventData.pointerDrag != null)
         {
             RectTransform dice = eventData.pointerDrag.GetComponent<RectTransform>();

@@ -17,6 +17,7 @@ public class SelectionManager : MonoBehaviour
     private List<Vector2Int> _neighbours = new List<Vector2Int>();
 
     public Hex SelectedHex => _selectedHex;
+    public void ClearSelectedHex() => _selectedHex = null;
 
     private void Awake()
     {
@@ -33,8 +34,6 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
-    public event Action<Hex> OnMovingTo;
-
     public void SelectHex(GameObject result) 
     {
         Hex selectedHex = result.GetComponent<Hex>();
@@ -45,10 +44,6 @@ public class SelectionManager : MonoBehaviour
             _selectedHex = selectedHex;
             _selectedHex.EnableSelect();
         }
-        //else if (selectedHex == _selectedHex)
-        //{
-        //    OnMovingTo?.Invoke(selectedHex);
-        //}
 
         if (selectedHex.GetComponentInChildren<Player>() == null) return;
         _selectedHex?.DisableSelect();

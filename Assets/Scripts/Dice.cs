@@ -21,19 +21,19 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("BeginDrag");
+        //Debug.Log("BeginDrag");
         canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("Ondrag");
+        //Debug.Log("Ondrag");
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("EndDrag");
+        //Debug.Log("EndDrag");
         canvasGroup.blocksRaycasts = true;
 
         if (transform.parent == _panel.transform)
@@ -43,7 +43,7 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     public void OnPointerDown(PointerEventData eventData)
     {
         transform.SetParent(_panel.transform);
-        Debug.Log("Click");
+        //Debug.Log("Click");
     }
 
     public void ResetPlace()

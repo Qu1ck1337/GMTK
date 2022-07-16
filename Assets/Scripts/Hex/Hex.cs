@@ -8,6 +8,8 @@ public class Hex : MonoBehaviour
     private Color _highligtColor;
     [SerializeField]
     private Color _selectedColor;
+    [SerializeField]
+    private Color _dangerColor;
 
     private Color _defaultColor;
     private SpriteRenderer _spriteRenderer;
@@ -38,6 +40,8 @@ public class Hex : MonoBehaviour
     public void EnableSelect()
     {
         _spriteRenderer.color = _selectedColor;
+        if (GetComponentInChildren<Enemy>() != null)
+            _spriteRenderer.color = _dangerColor;
     }
 
     public void DisableSelect()

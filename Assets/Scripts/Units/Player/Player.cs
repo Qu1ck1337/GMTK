@@ -18,10 +18,20 @@ public class Player : Unit
 
     public void MoveToSelectedHexagon()
     {
-        transform.parent = _selectionManager.SelectedHex.transform;
-        _hex = transform.parent.gameObject;
-        SelectCurrentHexHandler();
-        StartCoroutine(MoveToDestination(_selectionManager.SelectedHex.transform));
+        var selectedHex = _selectionManager.SelectedHex.transform;
+        if (selectedHex.GetComponentInChildren<Enemy>() == null)
+        {
+            transform.parent = selectedHex;
+            _hex = transform.parent.gameObject;
+            SelectCurrentHexHandler();
+            StartCoroutine(MoveToDestination(_selectionManager.SelectedHex.transform));
+        }
+        else 
+        {
+            StartCoroutine(MoveToDestination(selectedHex));
+            StartCoroutine(MoveToDestination(transform.parent.transform));
+            SelectCurrentHexHandler();
+        }
         //Vector3.Lerp(transform.position, hex.transform.position, Time.deltaTime * 10);
     }
 
@@ -39,5 +49,14 @@ public class Player : Unit
     private void SelectCurrentHexHandler()
     {
         _selectionManager.SelectHex(_hex);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var enemy = collision.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.ReduceHealth(_unitStats.Damage);
+        }
     }
 }
