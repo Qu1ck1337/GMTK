@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitStats:
     Health: 1000
-    Damage: 0
+    Damage: 100
     Defence: 0
     CellsCount: 0
   _hex: {fileID: 0}

@@ -13,50 +13,36 @@ public class Player : Unit
     private void Start()
     {
         _hexGrid.OnHexesWereSorted += SelectCurrentHexHandler;
-        _selectionManager.SelectHex(_hex);
+        GameManager.Self.OnPlayersTurn += SelectCurrentHexHandler;
+        //_selectionManager.SelectHex(_hex.gameObject);
     }
+
+    public event Action OnPlayerEndedStep;
 
     public void MoveToSelectedHexagon()
     {
         var selectedHex = _selectionManager.SelectedHex.transform;
+        _selectionManager.DisableHighlightsAll();
         if (selectedHex.GetComponentInChildren<Enemy>() == null)
         {
             transform.parent = selectedHex;
-            _hex = transform.parent.gameObject;
-            SelectCurrentHexHandler();
-            StartCoroutine(MoveToDestination(_selectionManager.SelectedHex.transform));
+            _hex = transform.parent.gameObject.GetComponent<Hex>();
+            StartCoroutine(MoveToDestination(_selectionManager.SelectedHex.transform, true));
         }
         else 
         {
-            StartCoroutine(MoveToDestination(selectedHex));
-            StartCoroutine(MoveToDestination(transform.parent.transform));
-            SelectCurrentHexHandler();
-        }
-        //Vector3.Lerp(transform.position, hex.transform.position, Time.deltaTime * 10);
-    }
-
-    private IEnumerator MoveToDestination(Transform destination)
-    {
-        var time = 0f;
-        while (time < 1f)
-        {
-            transform.position = Vector3.Lerp(transform.position, destination.position, time);
-            time += Time.deltaTime;
-            yield return null;
+            StartCoroutine(MoveToDestination(selectedHex, false));
+            StartCoroutine(MoveToDestination(transform.parent.transform, true));
         }
     }
 
     private void SelectCurrentHexHandler()
     {
-        _selectionManager.SelectHex(_hex);
+        _selectionManager.SelectHex(_hex.gameObject);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void EndCallEvent()
     {
-        var enemy = collision.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.ReduceHealth(_unitStats.Damage);
-        }
+        OnPlayerEndedStep?.Invoke();
     }
 }

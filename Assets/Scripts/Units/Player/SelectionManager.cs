@@ -72,4 +72,12 @@ public class SelectionManager : MonoBehaviour
         result = null;
         return false;
     }
+
+    public void DisableHighlightsAll()
+    {
+        foreach (Vector2Int neighbour in _neighbours)
+        {
+            _hexGrid.GetTileAt(neighbour).DisableHighlight();
+        }
+    }
 }
