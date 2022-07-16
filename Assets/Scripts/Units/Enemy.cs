@@ -9,8 +9,6 @@ public class Enemy : Unit
     [SerializeField]
     private Slider _healthBar;
 
-    public int Health => _unitStats.Health;
-
     private void Start()
     {
         _healthBar.maxValue = _unitStats.Health;

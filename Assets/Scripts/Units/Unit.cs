@@ -13,15 +13,20 @@ public class Unit : MonoBehaviour
     private Collider2D _collider;
     private bool _isAttacking;
 
+    public UnitStats UnitStats => _unitStats;
+
     private void Awake()
     {
         _hex = GetComponentInParent<Hex>();
         _collider = GetComponent<Collider2D>();
     }
 
-    public void ReduceHealth(int health)
+    public void GetDamage(int damage)
     {
-        _unitStats.Health -= health;
+        if (Random.Range(0f, 1f) < _unitStats.DodgeChance) return;
+        float damageProtection = 1 - _unitStats.Protection;
+        _unitStats.Protection = 0;
+        _unitStats.Health -= Mathf.RoundToInt(damage * damageProtection);
         if (_unitStats.Health <= 0)
         {
             Destroy(gameObject);
@@ -56,7 +61,7 @@ public class Unit : MonoBehaviour
         var unit = collision.GetComponent<Unit>();
         if (unit != null)
         {
-            unit.ReduceHealth(_unitStats.Damage);
+            unit.GetDamage(_unitStats.Damage);
         }
     }
 }

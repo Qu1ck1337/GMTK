@@ -5,6 +5,11 @@ using UnityEngine.EventSystems;
 
 public class CubeSlot : MonoBehaviour, IDropHandler
 {
+    [SerializeField]
+    private BuffType _buffType;
+
+    public BuffType BuffType => _buffType;
+
     public void OnDrop(PointerEventData eventData)
     {
         //Debug.Log("Ondrop");

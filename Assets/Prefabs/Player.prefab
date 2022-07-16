@@ -100,13 +100,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitStats:
-    Health: 200
+    Health: 5000
     Damage: 500
-    Defence: 0
+    DodgeChance: 0
+    Protection: 0
     CellsCount: 0
   _hex: {fileID: 0}
   _selectionManager: {fileID: 0}
   _hexGrid: {fileID: 0}
+  PlayerTemporaryBuffs:
+    DamageBoost: 0
+    DodgeBoost: 0
+    ExtraTurn: 0
 --- !u!61 &-2492837901896978586
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -7,6 +7,17 @@ public struct UnitStats
 {
     public int Health;
     public int Damage;
-    public float Defence;
+    [Range(0f, 1f)]
+    public float DodgeChance;
+    [Range(0f, 1f)]
+    public float Protection;
     public int CellsCount;
+}
+
+[System.Serializable]
+public struct TemporaryBuffs
+{
+    public int DamageBoost;
+    public float DodgeBoost;
+    public int ExtraTurn;
 }

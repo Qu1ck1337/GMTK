@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private bool _isEnemiesStep;
     private int _previousEnemyIndex = 0;
     private UIAssistant _uiAssistant;
+    private BuffsAssistant _buffsAssistant;
     private List<Enemy> _enemies = new List<Enemy>();
 
     public static GameManager Self;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         Self = this;
         _uiAssistant = GetComponent<UIAssistant>();
+        _buffsAssistant = GetComponent<BuffsAssistant>();
         _isEnemiesStep = !_isPlayersStep;
     }
 
@@ -43,7 +45,9 @@ public class GameManager : MonoBehaviour
 
     public void ResetAllForNextStep()
     {
-        _uiAssistant.ResetDicePlace();
+        //_uiAssistant.ResetDicePlace();
+        _buffsAssistant.GetAllBuffs();
+        Player.MoveToSelectedHexagon();
         _selectionManager.ClearSelectedHex();
     }
 
@@ -66,6 +70,7 @@ public class GameManager : MonoBehaviour
 
     private void EnemiesStep()
     {
+        if (_enemies.Count == 0) return;
         foreach (Enemy enemy in _enemies)
         {
             if (enemy == null) _enemies.Remove(enemy);

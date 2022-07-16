@@ -13,16 +13,16 @@ public class HealthBar : MonoBehaviour
     [SerializeField]
     private Image _filler;
 
-    private Enemy _enemy;
-    private int _enemiesDefaultHealth;
+    private UnitStats _enemyStats;
+    private int _enemieDefaultHealth;
     private void Start()
     {
-        _enemy = GetComponentInParent<Enemy>();
-        _enemiesDefaultHealth = _enemy.Health;
+        _enemyStats = GetComponentInParent<Enemy>().UnitStats;
+        _enemieDefaultHealth = _enemyStats.Health;
     }
 
     private void Update()
     {
-        _filler.color = Color.Lerp(_minColor, _maxColor, (float)_enemy.Health / _enemiesDefaultHealth);
+        _filler.color = Color.Lerp(_minColor, _maxColor, (float)_enemyStats.Health / _enemieDefaultHealth);
     }
 }
