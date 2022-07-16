@@ -25,22 +25,26 @@ public class BuffsAssistant : MonoBehaviour
 
     public void BuffActivate(BuffType type, int number)
     {
-        if (number % 2 != 0) return;
         switch (type)
         {
             case BuffType.DamageBoost:
+                if (number % 2 != 0) return;
                 GameManager.Self.Player.PlayerTemporaryBuffs.DamageBoost = Mathf.RoundToInt(GameManager.Self.Player.UnitStats.Damage * _damageBoostPerCent);
                 break;
             case BuffType.ProtectionBoost:
+                if (number % 2 != 0) return;
                 GameManager.Self.Player.AddProtection(_protectionBoostPerCent);
                 break;
             case BuffType.DodgeBoost:
+                if (number % 2 != 0) return;
                 GameManager.Self.Player.PlayerTemporaryBuffs.DodgeBoost = _dodgeBoost;
                 break;
             case BuffType.Healing:
+                if (number % 2 != 0) return;
                 GameManager.Self.Player.AddHealth(Mathf.RoundToInt(GameManager.Self.Player.DefaultHealth * _healingPerCent));
                 break;
             case BuffType.ExtraTurn:
+                if (number != 6) return;
                 GameManager.Self.Player.PlayerTemporaryBuffs.ExtraTurn = 1;
                 break;
         }

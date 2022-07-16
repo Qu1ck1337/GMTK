@@ -100,9 +100,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitStats:
-    Health: 1000
+    Health: 300
     Damage: 100
-    Defence: 0
+    DodgeChance: 0
+    Protection: 0
     CellsCount: 0
   _hex: {fileID: 0}
   _healthBar: {fileID: 8350904921479609116}
@@ -139,6 +140,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4538925169797822284}
     m_Modifications:
+    - target: {fileID: 1539266140995138429, guid: 787fc1035be41074c857e40c31acd71d, type: 3}
+      propertyPath: _maxColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1539266140995138429, guid: 787fc1035be41074c857e40c31acd71d, type: 3}
+      propertyPath: _minColor.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1951916466219734999, guid: 787fc1035be41074c857e40c31acd71d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

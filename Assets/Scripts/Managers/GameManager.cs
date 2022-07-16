@@ -40,7 +40,16 @@ public class GameManager : MonoBehaviour
     {
         _player.OnPlayerEndedStep += OnPlayerEndedStep;
         _enemies = FindObjectsOfType<Enemy>().ToList();
+        foreach (Enemy enemy in _enemies)
+        {
+            enemy.OnUnitDead += RemoveEnemyInEnemiesList;
+        }
         OnPlayersTurn?.Invoke();
+    }
+
+    private void RemoveEnemyInEnemiesList(Unit enemy)
+    {
+        _enemies.Remove((Enemy)enemy);
     }
 
     public void ResetAllForNextStep()
@@ -71,10 +80,6 @@ public class GameManager : MonoBehaviour
     private void EnemiesStep()
     {
         if (_enemies.Count == 0) return;
-        foreach (Enemy enemy in _enemies)
-        {
-            if (enemy == null) _enemies.Remove(enemy);
-        }
         _previousEnemyIndex = 0;
         _enemies[_previousEnemyIndex].MakeStep();
         _enemies[_previousEnemyIndex].OnEnemyEndedStep += NextEnemy;

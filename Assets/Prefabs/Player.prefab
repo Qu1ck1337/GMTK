@@ -100,14 +100,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unitStats:
-    Health: 5000
-    Damage: 500
-    DodgeChance: 0
-    Protection: 0
+    Health: 500
+    Damage: 100
+    DodgeChance: 0.2
+    Protection: 0.3
     CellsCount: 0
   _hex: {fileID: 0}
   _selectionManager: {fileID: 0}
   _hexGrid: {fileID: 0}
+  _defaultHealth: 0
   PlayerTemporaryBuffs:
     DamageBoost: 0
     DodgeBoost: 0

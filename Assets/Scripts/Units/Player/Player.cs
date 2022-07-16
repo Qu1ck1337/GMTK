@@ -9,11 +9,12 @@ public class Player : Unit
     private SelectionManager _selectionManager;
     [SerializeField]
     private HexGrid _hexGrid;
-
     [SerializeField]
     private int _defaultHealth;
+    private float _previousDodge;
 
     public TemporaryBuffs PlayerTemporaryBuffs;
+
     public int DefaultHealth => _defaultHealth;
 
     private void Start()
@@ -29,7 +30,9 @@ public class Player : Unit
     public void MoveToSelectedHexagon()
     {
         _unitStats.Damage += PlayerTemporaryBuffs.DamageBoost;
+        _unitStats.DodgeChance -= _previousDodge;
         _unitStats.DodgeChance += PlayerTemporaryBuffs.DodgeBoost;
+        _previousDodge = PlayerTemporaryBuffs.DodgeBoost;
         var selectedHex = _selectionManager.SelectedHex.transform;
         _selectionManager.DisableHighlightsAll();
         if (selectedHex.GetComponentInChildren<Enemy>() == null)
@@ -52,9 +55,8 @@ public class Player : Unit
 
     protected override void EndCallEvent()
     {
-        
+
         _unitStats.Damage -= PlayerTemporaryBuffs.DamageBoost;
-        _unitStats.DodgeChance -= PlayerTemporaryBuffs.DodgeBoost;
         PlayerTemporaryBuffs.DamageBoost = 0;
         PlayerTemporaryBuffs.DodgeBoost = 0;
         if (PlayerTemporaryBuffs.ExtraTurn > 0)

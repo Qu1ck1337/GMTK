@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,14 +22,17 @@ public class Unit : MonoBehaviour
         _collider = GetComponent<Collider2D>();
     }
 
+    public event Action<Unit> OnUnitDead;
+
     public void GetDamage(int damage)
     {
-        if (Random.Range(0f, 1f) < _unitStats.DodgeChance) return;
+        if (UnityEngine.Random.Range(0f, 1f) < _unitStats.DodgeChance) return;
         float damageProtection = 1 - _unitStats.Protection;
         _unitStats.Protection = 0;
         _unitStats.Health -= Mathf.RoundToInt(damage * damageProtection);
         if (_unitStats.Health <= 0)
         {
+            OnUnitDead?.Invoke(this);
             Destroy(gameObject);
         }
     }
