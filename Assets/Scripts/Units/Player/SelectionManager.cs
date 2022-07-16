@@ -45,10 +45,10 @@ public class SelectionManager : MonoBehaviour
             _selectedHex = selectedHex;
             _selectedHex.EnableSelect();
         }
-        else if (selectedHex == _selectedHex)
-        {
-            OnMovingTo?.Invoke(selectedHex);
-        }
+        //else if (selectedHex == _selectedHex)
+        //{
+        //    OnMovingTo?.Invoke(selectedHex);
+        //}
 
         if (selectedHex.GetComponentInChildren<Player>() == null) return;
         _selectedHex?.DisableSelect();

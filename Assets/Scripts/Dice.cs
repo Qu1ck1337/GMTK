@@ -10,6 +10,9 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     [SerializeField] private GameObject _diceHubPanel;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+
+    public GameObject DiceHubPanel => _diceHubPanel;
+    public GameObject DicePanel => _panel;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -34,13 +37,18 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
         canvasGroup.blocksRaycasts = true;
 
         if (transform.parent == _panel.transform)
-        transform.SetParent(_diceHubPanel.transform);
-        GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
+            ResetPlace();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         transform.SetParent(_panel.transform);
         Debug.Log("Click");
+    }
+
+    public void ResetPlace()
+    {
+        transform.SetParent(_diceHubPanel.transform);
+        GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
     }
 }
