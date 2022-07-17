@@ -8,6 +8,9 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     [SerializeField] private Canvas canvas;
     [SerializeField] private GameObject _panel;
     [SerializeField] private GameObject _diceHubPanel;
+    [SerializeField] private AudioClip _pickUpSound;
+    [SerializeField] private AudioClip _dropDownSound;
+    private AudioSource _audioSource;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 
@@ -17,6 +20,7 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -35,7 +39,8 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     {
         //Debug.Log("EndDrag");
         canvasGroup.blocksRaycasts = true;
-
+        _audioSource.clip = _dropDownSound;
+        _audioSource.Play();
         if (transform.parent == _panel.transform)
             ResetPlace();
     }
@@ -43,6 +48,8 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     public void OnPointerDown(PointerEventData eventData)
     {
         transform.SetParent(_panel.transform);
+        _audioSource.clip = _pickUpSound;
+        _audioSource.Play();
         //Debug.Log("Click");
     }
 

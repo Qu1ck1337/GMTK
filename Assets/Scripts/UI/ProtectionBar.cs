@@ -9,6 +9,6 @@ public class ProtectionBar : MonoBehaviour
 
     private void Update()
     {
-        _label.text = (GameManager.Self.Player.UnitStats.Protection * 100).ToString() + "%";
+        _label.text = (GameManager.Self.Player.UnitStats.Protection * 100).ToString() + " PN";
     }
 }

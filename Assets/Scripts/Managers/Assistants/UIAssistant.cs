@@ -9,6 +9,8 @@ public class UIAssistant : MonoBehaviour
     private Dice[] _dices;
     [SerializeField]
     private Button _confirmationButton;
+    [SerializeField]
+    private GameObject _losePanel;
 
     private SelectionManager _selectionManager;
 
@@ -34,5 +36,10 @@ public class UIAssistant : MonoBehaviour
         {
             dice.ResetPlace();
         }
+    }
+
+    public void InstantiateLosePanel()
+    {
+        _losePanel.gameObject.SetActive(true);
     }
 }

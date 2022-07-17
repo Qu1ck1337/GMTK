@@ -8,6 +8,8 @@ public class Enemy : Unit
 {
     [SerializeField]
     private Slider _healthBar;
+    [SerializeField]
+    private AudioClip _enemyDamagedSound;
 
     private void Start()
     {
@@ -21,6 +23,7 @@ public class Enemy : Unit
 
     public void MakeStep()
     {
+        if (GameManager.Self.Player == null) return;
         List<Vector2Int> Neighbours = GameManager.Self.HexGrid.GetNeighboursFor(_hex.HexCoords);
         Hex bestHex = null;
         float minDistance = float.MaxValue;
@@ -45,21 +48,31 @@ public class Enemy : Unit
     public void MoveToSelectedHexagon(Hex selectedHex)
     {
         if (selectedHex == null) return;
-        if (selectedHex.GetComponentInChildren<Player>() == null)
+        var player = selectedHex.GetComponentInChildren<Player>();
+        if (player == null)
         {
             transform.parent = selectedHex.transform;
             _hex = transform.parent.gameObject.GetComponent<Hex>();
-            StartCoroutine(MoveToDestination(selectedHex.transform, true));
+            StartCoroutine(MoveToDestination(selectedHex.transform, true, false));
         }
         else
         {
-            StartCoroutine(MoveToDestination(selectedHex.transform, false));
-            StartCoroutine(MoveToDestination(transform.parent.transform, true));
+            gameObject.layer = 8;
+            StartCoroutine(MoveToDestination(selectedHex.transform, false, true));
+            StartCoroutine(MoveToDestination(transform.parent.transform, true, false));
         }
     }
 
     protected override void EndCallEvent()
     {
         OnEnemyEndedStep?.Invoke();
+        gameObject.layer = 0;
+    }
+
+    public override void GetDamage(int damage)
+    {
+        base.GetDamage(damage);
+        _audioSource.clip = _enemyDamagedSound;
+        _audioSource.Play();
     }
 }

@@ -55,7 +55,6 @@ public class BuffsAssistant : MonoBehaviour
         foreach(CubeSlot slot in _cubeSlots)
         {
             var dice = slot.gameObject.GetComponentInChildren<Dice>();
-            Debug.Log(dice);
             if (dice != null)
             {
                 dice.ResetPlace();

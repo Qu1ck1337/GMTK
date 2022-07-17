@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,10 +17,19 @@ public class GameManager : MonoBehaviour
     private bool _isPlayersStep = true;
     [SerializeField]
     private bool _isEnemiesStep;
+    [Space, SerializeField]
+    private int _nextSceneIndex;
+    [Space, SerializeField]
+    private AudioSource _mainAudioSource;
+    [SerializeField]
+    private AudioClip _winLevelMusic;
+    [SerializeField]
+    private AudioClip _loseLevelMusic;
     private int _previousEnemyIndex = 0;
     private UIAssistant _uiAssistant;
     private BuffsAssistant _buffsAssistant;
     private List<Enemy> _enemies = new List<Enemy>();
+    private bool _isLevelEnded;
 
     public static GameManager Self;
     public UIAssistant UIAssistant => _uiAssistant;
@@ -70,6 +80,31 @@ public class GameManager : MonoBehaviour
                 EnemiesStep();
             }
         }
+        if (!_isLevelEnded)
+        {
+            if (_enemies.Count == 0)
+            {
+                _mainAudioSource.clip = _winLevelMusic;
+                _mainAudioSource.loop = false;
+                _mainAudioSource.Play();
+                StartCoroutine(WaitForTheEndOfLevel(_winLevelMusic.length));
+                _isLevelEnded = true;
+            }
+            if (_player == null)
+            {
+                _mainAudioSource.clip = _loseLevelMusic;
+                _mainAudioSource.loop = true;
+                _mainAudioSource.Play();
+                _isLevelEnded = true;
+                _uiAssistant.InstantiateLosePanel();
+            }
+        }
+    }
+
+    private IEnumerator WaitForTheEndOfLevel(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        SceneManager.LoadScene(_nextSceneIndex);
     }
 
     private void OnPlayerEndedStep()
@@ -102,5 +137,10 @@ public class GameManager : MonoBehaviour
             _isPlayersStep = true;
             OnPlayersTurn?.Invoke();
         }
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

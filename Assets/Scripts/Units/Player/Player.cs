@@ -11,7 +11,14 @@ public class Player : Unit
     private HexGrid _hexGrid;
     [SerializeField]
     private int _defaultHealth;
+    [SerializeField]
+    private AudioClip _playerDamagesSound;
+    [SerializeField]
+    private Animator _animator;
     private float _previousDodge;
+    private Transform _selectedHex;
+    private bool _alreadyDead;
+    private Enemy _selectedEnemy;
 
     public TemporaryBuffs PlayerTemporaryBuffs;
 
@@ -19,10 +26,11 @@ public class Player : Unit
 
     private void Start()
     {
+        _animator = GetComponentInChildren<Animator>();
         _hexGrid.OnHexesWereSorted += SelectCurrentHexHandler;
         GameManager.Self.OnPlayersTurn += SelectCurrentHexHandler;
         _defaultHealth = _unitStats.Health;
-        //_selectionManager.SelectHex(_hex.gameObject);
+        _selectionManager.SelectHex(_hex.gameObject);
     }
 
     public event Action OnPlayerEndedStep;
@@ -37,15 +45,38 @@ public class Player : Unit
         _selectionManager.DisableHighlightsAll();
         if (selectedHex.GetComponentInChildren<Enemy>() == null)
         {
+            _selectedEnemy = null;
             transform.parent = selectedHex;
             _hex = transform.parent.gameObject.GetComponent<Hex>();
-            StartCoroutine(MoveToDestination(_selectionManager.SelectedHex.transform, true));
+            StartCoroutine(WalkingAnim());
         }
         else 
         {
-            StartCoroutine(MoveToDestination(selectedHex, false));
-            StartCoroutine(MoveToDestination(transform.parent.transform, true));
+            _selectedHex = selectedHex;
+            _selectedEnemy = _selectedHex.GetComponentInChildren<Enemy>();
+            _selectedEnemy.gameObject.layer = 8;
+            _animator.SetTrigger("PlayerAttack");
         }
+    }
+
+    private IEnumerator WalkingAnim()
+    {
+        _animator.SetTrigger("PlayerWalking");
+        yield return new WaitForSeconds(0.2f);
+        StartCoroutine(MoveToDestination(transform.parent, true, false));
+    }
+
+    public void AttackUnit_AnimationEvent()
+    {
+        StartCoroutine(MoveToDestination(_selectedHex, false, true));
+        StartCoroutine(MoveToDestination(transform.parent.transform, true, false));
+    }
+
+    protected override void DieAnimationHandler()
+    {
+        _alreadyDead = true;
+        _animator.SetTrigger("PlayerDies");
+        Destroy(this);
     }
 
     private void SelectCurrentHexHandler()
@@ -55,7 +86,6 @@ public class Player : Unit
 
     protected override void EndCallEvent()
     {
-
         _unitStats.Damage -= PlayerTemporaryBuffs.DamageBoost;
         PlayerTemporaryBuffs.DamageBoost = 0;
         PlayerTemporaryBuffs.DodgeBoost = 0;
@@ -66,6 +96,8 @@ public class Player : Unit
             return;
         }
         OnPlayerEndedStep?.Invoke();
+        if (_selectedEnemy != null)
+            _selectedEnemy.gameObject.layer = 0;
     }
 
     public void AddHealth(int health)
@@ -84,5 +116,14 @@ public class Player : Unit
         {
             _unitStats.Protection = 1f;
         }
+    }
+
+    public override void GetDamage(int damage)
+    {
+        base.GetDamage(damage);
+        //if (_alreadyDead) return;
+        _animator.SetTrigger("PlayerDamaged");
+        _audioSource.clip = _playerDamagesSound;
+        _audioSource.Play();
     }
 }
