@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HexCoordinates : MonoBehaviour
 {
-    public static float xOffset = 1.2f, yOffset = 1f;
+    public static float xOffset = 1.24f, yOffset = 1.14f;
 
     [Header("Offset coordinates")]
     [SerializeField]

@@ -121,7 +121,7 @@ public class Player : Unit
     public override void GetDamage(int damage)
     {
         base.GetDamage(damage);
-        //if (_alreadyDead) return;
+        if (_alreadyDead) return;
         _animator.SetTrigger("PlayerDamaged");
         _audioSource.clip = _playerDamagesSound;
         _audioSource.Play();

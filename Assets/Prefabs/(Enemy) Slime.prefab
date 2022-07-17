@@ -105,7 +105,7 @@ MonoBehaviour:
   _unitStats:
     Health: 300
     Damage: 100
-    DodgeChance: 0
+    DodgeChance: 0.1
     Protection: 0
     CellsCount: 0
   _hex: {fileID: 0}
@@ -138,7 +138,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.84119993, y: 0.7812}
+  m_Size: {x: 1.05, y: 1.14}
   m_EdgeRadius: 0
 --- !u!82 &5601422913604129495
 AudioSource:

@@ -47,7 +47,11 @@ public class Enemy : Unit
 
     public void MoveToSelectedHexagon(Hex selectedHex)
     {
-        if (selectedHex == null) return;
+        if (selectedHex == null)
+        {
+            OnEnemyEndedStep?.Invoke();
+            return; 
+        }
         var player = selectedHex.GetComponentInChildren<Player>();
         if (player == null)
         {

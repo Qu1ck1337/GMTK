@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ public class BuffsAssistant : MonoBehaviour
     private float _healingPerCent = 0.2f;
 
     private List<CubeSlot> _cubeSlots = new List<CubeSlot>();
+    private int _uncheckedDicesCount;
 
     private void Start()
     {
@@ -50,16 +52,35 @@ public class BuffsAssistant : MonoBehaviour
         }
     }
 
-    public void GetAllBuffs()
+    public IEnumerator GetAllBuffs()
     {
-        foreach(CubeSlot slot in _cubeSlots)
+        _uncheckedDicesCount = 0;
+        foreach (CubeSlot slot in _buffs)
         {
             var dice = slot.gameObject.GetComponentInChildren<Dice>();
             if (dice != null)
             {
-                dice.ResetPlace();
-                BuffActivate(slot.BuffType, Random.Range(1, 7));
+                dice.Roll();
+                dice.OnAnimationEnd += CheckDice;
             }
+            yield return new WaitForSeconds(4f);
+        }
+    }
+
+    private void CheckDice(Dice arg1, int arg2)
+    {
+        StartCoroutine(CheckDiceCoroutine(arg1, arg2));
+    }
+
+    public IEnumerator CheckDiceCoroutine(Dice dice, int num)
+    {
+        BuffActivate(_cubeSlots[_uncheckedDicesCount].BuffType, num);
+        yield return new WaitForSeconds(2f);
+        dice.ResetPlace();
+        _uncheckedDicesCount++;
+        if (_uncheckedDicesCount == 2)
+        {
+            GameManager.Self.ResetAllForNextStepAfterBuffs();
         }
     }
 }

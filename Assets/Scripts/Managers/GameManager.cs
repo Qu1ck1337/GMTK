@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     private int _previousEnemyIndex = 0;
     private UIAssistant _uiAssistant;
     private BuffsAssistant _buffsAssistant;
+    [SerializeField]
     private List<Enemy> _enemies = new List<Enemy>();
     private bool _isLevelEnded;
 
@@ -65,7 +66,11 @@ public class GameManager : MonoBehaviour
     public void ResetAllForNextStep()
     {
         //_uiAssistant.ResetDicePlace();
-        _buffsAssistant.GetAllBuffs();
+        StartCoroutine(_buffsAssistant.GetAllBuffs());
+    }
+
+    public void ResetAllForNextStepAfterBuffs()
+    {
         Player.MoveToSelectedHexagon();
         _selectionManager.ClearSelectedHex();
     }
@@ -116,8 +121,8 @@ public class GameManager : MonoBehaviour
     {
         if (_enemies.Count == 0) return;
         _previousEnemyIndex = 0;
-        _enemies[_previousEnemyIndex].MakeStep();
         _enemies[_previousEnemyIndex].OnEnemyEndedStep += NextEnemy;
+        _enemies[_previousEnemyIndex].MakeStep();
     }
 
     public event Action OnPlayersTurn;
@@ -128,8 +133,8 @@ public class GameManager : MonoBehaviour
         if (_previousEnemyIndex < _enemies.Count - 1)
         {
             _previousEnemyIndex++;
-            _enemies[_previousEnemyIndex].MakeStep();
             _enemies[_previousEnemyIndex].OnEnemyEndedStep += NextEnemy;
+            _enemies[_previousEnemyIndex].MakeStep();
         }
         else
         {

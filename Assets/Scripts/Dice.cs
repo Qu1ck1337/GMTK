@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
@@ -13,11 +15,18 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
     private AudioSource _audioSource;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+    private int _number;
+    [SerializeField]
+    private Animator _animator;
+    private Sprite _defaultSprite;
+    [SerializeField]
+    private Sprite[] _sprites;
 
     public GameObject DiceHubPanel => _diceHubPanel;
     public GameObject DicePanel => _panel;
     private void Awake()
     {
+        _defaultSprite = GetComponent<Image>().sprite;
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         _audioSource = GetComponent<AudioSource>();
@@ -55,7 +64,22 @@ public class Dice : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndD
 
     public void ResetPlace()
     {
+        GetComponent<Image>().overrideSprite = null;
         transform.SetParent(_diceHubPanel.transform);
         GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
+    }
+
+    public event Action<Dice, int> OnAnimationEnd;
+
+    public void Roll()
+    {
+        _animator.SetTrigger("ok");
+        _number = UnityEngine.Random.Range(1, 7);
+    }
+
+    public void OnAnimationEnd_AnimationEvent()
+    {
+        GetComponent<Image>().overrideSprite = _sprites[_number - 1];
+        OnAnimationEnd?.Invoke(this, _number);
     }
 }
